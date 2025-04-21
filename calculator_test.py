@@ -19,11 +19,32 @@ def test_server_calculator():
         if radio_button_count == 0:
             print("Радиокнопка 'Dedicated' не найдена на странице.")
             return
+
+        # Шаг 4: Ожидаем, что радиокнопка станет доступной
+        try:
+            dedicated_radio_button.wait_for(state="visible", timeout=10000)
+            print("Радиокнопка 'Dedicated' стала видимой.")
+        except:
+            print("Радиокнопка 'Dedicated' не стала видимой в течение 10 секунд.")
+            return
+
+        # Проверяем, что радиокнопка доступна для выбора
+        assert dedicated_radio_button.is_enabled()
+        assert dedicated_radio_button.is_visible()
+
         # Шаг 5: Кликаем по кнопке "Dedicated servers"
         dedicated_radio_button.click()
 
         # Шаг 6: Ищем кнопку для выбора валюты (USD)
         usd_currency_radio_button = page.locator('input[type="radio"][value="USD"]')
+
+        # Ожидаем, что радиокнопка для валюты станет видимой
+        try:
+            usd_currency_radio_button.wait_for(state="visible", timeout=10000)
+            print("Радиокнопка 'USD' стала видимой.")
+        except:
+            print("Радиокнопка 'USD' не стала видимой в течение 10 секунд.")
+            return
 
         # Кликаем по кнопке для валюты USD
         usd_currency_radio_button.click()
@@ -74,7 +95,7 @@ def test_server_calculator():
         page.wait_for_timeout(5000)  # Задержка 5 секунд
         page.screenshot(path="screenshot.png")
 
-        # Закрываем браузер
+
         browser.close()
 
 if __name__ == "__main__":
